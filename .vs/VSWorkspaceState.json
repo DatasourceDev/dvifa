@@ -1,0 +1,14 @@
+{
+  "ExpandedNodes": [
+    "\\protected",
+    "\\protected\\controllers",
+    "\\protected\\models",
+    "\\protected\\modules",
+    "\\protected\\modules\\administrator",
+    "\\protected\\modules\\administrator\\controllers",
+    "\\protected\\modules\\administrator\\views",
+    "\\protected\\modules\\administrator\\views\\manageSchedule",
+    "\\protected\\modules\\administrator\\views\\register"
+  ],
+  "PreviewInSolutionExplorer": false
+}
