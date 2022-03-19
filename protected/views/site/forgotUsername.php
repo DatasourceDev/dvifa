@@ -95,10 +95,10 @@ echo $form->fileFieldGroup($model, 'attachment_file', array(
     $(document).ready(function () {
         $('#frm-forgot').on('submit', function(e){
             e.preventDefault();
-            //var action = get_action();
-            //if(action == true){
+            var action = get_action();
+            if(action == true){
                 this.submit();
-            //}
+            }
         });
     });
 </script>
