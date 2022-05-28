@@ -4,19 +4,16 @@ class RegisterController extends Controller {
 
     public function accessRules() {
         return array_merge(array(
-            array(
-                'allow',
-                'users' => array('*'),
-                'actions' => array(
-                    'createGeneralThai',
-                    'createGeneralForeigner',
-                    'createDiplomatThai',
-                    'createDiplomatForeigner',
-                ),
-                'verbs' => array(
-                    'GET'
-                )
-            ),
+            // array(
+            //     'allow',
+            //     'users' => array('*'),
+            //     'actions' => array(
+                   
+            //     ),
+            //     'verbs' => array(
+            //         'GET'
+            //     )
+            // ),
             array(
                 'allow',
                 'users' => array('*'),
@@ -47,6 +44,10 @@ class RegisterController extends Controller {
                     'getDepartmentList',
                     'ajaxUploadFile',
                     'processImage',
+                    'createGeneralThai',
+                    'createGeneralForeigner',
+                    'createDiplomatThai',
+                    'createDiplomatForeigner',
                 ),
             ),
                 ), parent::accessRules());

@@ -10,16 +10,43 @@
     );
     $this->widget('booster.widgets.TbButton', array(
         'label' => Helper::t('Register', 'Register'),
-        'url' => array(CHtml::value($link, $accountType->id, 1),
-            'account_type_id' => Yii::app()->request->getQuery('account_type_id'),
-            'exam_code' => Yii::app()->request->getQuery('exam_code'),
-        ),
+        // 'url' => array(CHtml::value($link, $accountType->id, 1),
+        //     'account_type_id' => Yii::app()->request->getQuery('account_type_id'),
+        //     'exam_code' => Yii::app()->request->getQuery('exam_code'),
+        // ),
         'buttonType' => 'link',
         'context' => 'primary',
         'size' => 'large',
+        'htmlOptions' => array(
+            'data-toggle' => 'modal',
+            'data-target' => '#pdpa-modal',
+        ),
     ));
     ?>
 </div>
+<?php
+$this->beginWidget('booster.widgets.TbModal', array(
+    'id' => 'pdpa-modal',
+));
+?>
+<div class="modal-header bg-primary">
+    <h3 class="fancy modal-title text-center">
+</h3>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-12">
+            <?php 
+                $this->renderPartial('pdpa', array(
+                    'accountType' => $accountType,
+                ));
+             ?>
+        </div>
+    </div>
+</div>
+<?php $this->endWidget(); ?>
+
+
 <?php
 $this->beginWidget('booster.widgets.TbModal', array(
     'id' => 'register-general-modal',
@@ -65,6 +92,8 @@ $this->beginWidget('booster.widgets.TbModal', array(
     </div>
 </div>
 <?php $this->endWidget(); ?>
+
+
 <?php if (isset($examType->infoFile->fileUrl)): ?>
     <?php
     $this->beginWidget('CodeskModal', array(
