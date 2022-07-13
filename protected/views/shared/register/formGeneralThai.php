@@ -7,9 +7,10 @@
 <?php Yii::app()->clientScript->registerCssFile(Yii::app()->baseUrl . '/js/vendor/jquery-file-upload-9.12.5/css/jquery.fileupload.css'); ?>
 <?php Yii::app()->clientScript->registerScriptFile(Yii::app()->baseUrl . '/js/vendor/bootstrap-datepicker-thai.js'); ?>
 <?php $requirePassword = isset($requirePassword) ? $requirePassword : true; ?>
-<?php //echo $form->errorSummary(array($model, $profile));                                   ?>
+<?php //echo $form->errorSummary(array($model, $profile));                                   
+?>
 <div id="form-register">
-    <?php if ($model->isNewRecord): ?>
+    <?php if ($model->isNewRecord) : ?>
         <h4 class="fancy"><?php echo Yii::t('register', 'Account Information'); ?></h4>
         <div class="row">
             <div class="col-md-8">
@@ -30,7 +31,7 @@
                     ));
                     ?>
                 </div>
-                <?php if ($requirePassword): ?>
+                <?php if ($requirePassword) : ?>
                     <?php
                     echo $form->passwordFieldGroup($model, 'password_input', array(
                         'widgetOptions' => array(
@@ -125,7 +126,7 @@
             ?>
 
             <!-- Change Name -->
-            <?php if ($this->action->id === 'profile' && Yii::app()->request->getQuery('mode') !== 'firsttime'): ?>
+            <?php if ($this->action->id === 'profile' && Yii::app()->request->getQuery('mode') !== 'firsttime') : ?>
                 <div class="form-group">
                     <div class="col-sm-8 col-sm-offset-4">
                         <?php
@@ -188,17 +189,7 @@
                 ),
             ));
             ?>
-            <?php
-            echo $form->dropDownListGroup($profile, 'religion_id', array(
-                'widgetOptions' => array(
-                    'data' => CHtml::listData(CodeReligion::model()->findAll(), 'id', 'name_th'),
-                    'htmlOptions' => array(
-                        'id' => 'Profile_religion_id',
-                        'prompt' => '(กรุณาเลือก)',
-                    ),
-                ),
-            ));
-            ?>
+
             <?php
             echo $form->textFieldGroup($profile, 'religion_other', array(
                 'widgetOptions' => array(
@@ -514,7 +505,7 @@
                     'hint' => 'เฉพาะไฟล์ประเภท ' . implode(',', Helper::getAllowedDocumentExtension()) . ' ที่มีขนาดไม่เกิน 1MB<br/>ตัวอย่างรูปแบบไฟล์ข้อมูล ' . CHtml::link('[ดาวน์โหลด]', array('//get/downloadSelfExample')),
                 ));
                 ?>
-                <?php if (!$model->isNewRecord && $profile->selfFile->getFileUrl()): ?>
+                <?php if (!$model->isNewRecord && $profile->selfFile->getFileUrl()) : ?>
                     <div class="form-group">
                         <div class="col-sm-8 col-sm-offset-4">
                             <?php
@@ -589,8 +580,8 @@
                 ),
             ));
             ?>
-            <br/>
-            <br/>
+            <br />
+            <br />
             <h4 class="fancy">ชื่อหน่วยงานที่ต้องการให้ระบุในใบรายงานผลสอบ (ภาษาอังกฤษ)</h4>
             <?php
             echo $form->textFieldGroup($profile, 'work_department', array(
@@ -686,8 +677,8 @@
             echo $form->dropDownListGroup($profile, 'work_address_amphur_id', array(
                 'widgetOptions' => array(
                     'data' => CHtml::listData(CodeAmphur::model()->sortBy('name')->findAllByAttributes(array(
-                                'code_province_id' => $profile->work_address_province_id,
-                            )), 'id', 'name'),
+                        'code_province_id' => $profile->work_address_province_id,
+                    )), 'id', 'name'),
                     'htmlOptions' => array(
                         'id' => 'Profile_work_address_amphur_id',
                         'class' => 'input-update',
@@ -701,9 +692,9 @@
             echo $form->dropDownListGroup($profile, 'work_address_tumbon_id', array(
                 'widgetOptions' => array(
                     'data' => CHtml::listData(CodeTumbon::model()->sortBy('name')->findAllByAttributes(array(
-                                'code_province_id' => $profile->work_address_province_id,
-                                'code_amphur_id' => $profile->work_address_amphur_id,
-                            )), 'id', 'name'),
+                        'code_province_id' => $profile->work_address_province_id,
+                        'code_amphur_id' => $profile->work_address_amphur_id,
+                    )), 'id', 'name'),
                     'htmlOptions' => array(
                         'id' => 'Profile_work_address_tumbon_id',
                         'prompt' => '(กรุณาเลือก)',
@@ -814,8 +805,8 @@
                 echo $form->dropDownListGroup($profile, 'reply_address_amphur_id', array(
                     'widgetOptions' => array(
                         'data' => CHtml::listData(CodeAmphur::model()->sortBy('name')->findAllByAttributes(array(
-                                    'code_province_id' => $profile->reply_address_province_id,
-                                )), 'id', 'name'),
+                            'code_province_id' => $profile->reply_address_province_id,
+                        )), 'id', 'name'),
                         'htmlOptions' => array(
                             'id' => 'Profile_reply_address_amphur_id',
                             'class' => 'input-update',
@@ -830,9 +821,9 @@
                 echo $form->dropDownListGroup($profile, 'reply_address_tumbon_id', array(
                     'widgetOptions' => array(
                         'data' => CHtml::listData(CodeTumbon::model()->sortBy('name')->findAllByAttributes(array(
-                                    'code_province_id' => $profile->reply_address_province_id,
-                                    'code_amphur_id' => $profile->reply_address_amphur_id,
-                                )), 'id', 'name'),
+                            'code_province_id' => $profile->reply_address_province_id,
+                            'code_amphur_id' => $profile->reply_address_amphur_id,
+                        )), 'id', 'name'),
                         'htmlOptions' => array(
                             'id' => 'Profile_reply_address_tumbon_id',
                             'prompt' => '(กรุณาเลือก)',
@@ -913,13 +904,19 @@
                 ),
             ));
             ?>
+            <div class="form-group">
+                <label class="col-sm-4"></label>
+                <div class="col-sm-8">
+                    <span class="required">ผู้สมัครสอบได้รับความยินยอมจากเจ้าของข้อมูลให้ใช้ในการอ้างอิงสำหรับกรณีนี้เป็นที่เรียบร้อยแล้ว</h5>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-<?php if (Yii::app()->request->getQuery('mode') !== 'firsttime'): ?>
+<?php if (Yii::app()->request->getQuery('mode') !== 'firsttime') : ?>
     <script type="text/javascript">
-        $(document).ready(function () {
-            $('#require_changename').change(function () {
+        $(document).ready(function() {
+            $('#require_changename').change(function() {
                 if ($(this).prop('checked')) {
                     $('#Profile_title_id_th').prop('disabled', false);
                     $('#Profile_title_th').prop('disabled', false);
@@ -944,20 +941,20 @@
             });
             $('#require_changename').trigger('change');
         });
-    </script>     
+    </script>
 <?php endif; ?>
 <script type="text/javascript">
-    $(document).ready(function () {
+    $(document).ready(function() {
 
-        $('#btn-upload-pane').click(function () {
+        $('#btn-upload-pane').click(function() {
             $('#upload-modal').modal('show');
         });
 
-        $(document).on('change', '#Profile_work_office_type', function () {
+        $(document).on('change', '#Profile_work_office_type', function() {
             $("#Profile_work_office_id").select2("val", null);
         });
 
-        $(document).on('change', '#Profile_work_office_id', function () {
+        $(document).on('change', '#Profile_work_office_id', function() {
             if ($(this).val() === '9999') {
                 $('#Profile_work_office_other_th').val('');
                 $('#Profile_work_office_other_th').closest('.form-group').find('label').html('ชื่อหน่วยงาน <span class="required">*</span');
@@ -981,12 +978,13 @@
 
     function formatDepartment(item) {
         if (item) {
-            return  '<div>' + item.name_th + '<div><small class="text-muted">' + item.name_en + '</small></div></div>';
+            return '<div>' + item.name_th + '<div><small class="text-muted">' + item.name_en + '</small></div></div>';
         }
     }
+
     function formatDepartmentSelection(item) {
         if (item) {
-            return  item.name_th + ' / ' + item.name_en;
+            return item.name_th + ' / ' + item.name_en;
         }
     }
 </script>

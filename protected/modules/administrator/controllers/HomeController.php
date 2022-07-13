@@ -1,8 +1,10 @@
 <?php
 
-class HomeController extends AdministratorController {
+class HomeController extends AdministratorController
+{
 
-    public function accessRules() {
+    public function accessRules()
+    {
         return array_merge(array(
             array(
                 'allow',
@@ -18,10 +20,11 @@ class HomeController extends AdministratorController {
                     'error',
                 ),
             ),
-                ), parent::accessRules());
+        ), parent::accessRules());
     }
 
-    public function actionIndex() {
+    public function actionIndex()
+    {
 
         $nextSchedule = ExamSchedule::model()->next()->find();
 
@@ -110,29 +113,42 @@ class HomeController extends AdministratorController {
         ));
     }
 
-    public function actionAcceptPrintResult($id) {
-       $model = ExamApplicationResult::model()->findByPk($id);
-       $model->doPrintRequestResult();
+    public function actionAcceptPrintResult($id)
+    {
+        $model = ExamApplicationResult::model()->findByPk($id);
+        $model->doPrintRequestResult();
 
-       $requestResult = new ExamApplicationResult('search');
-       $requestResult->unsetAttributes();
-       $requestResultProvider = $requestResult->search();
-       $criteria = new CDbCriteria();
-       $condition = 't.is_request=1 and t.exam_application_id = ' . $model->exam_application_id;
-       $criteria->addCondition($condition);
-       $requestResultProvider->criteria->mergeWith($criteria);
-       if(count($requestResultProvider)){
-          $appication = ExamApplication::model()->findByPk($model->exam_application_id);
-          $appication->doPrintRequestResult();
-       }
+        $requestResult = new ExamApplicationResult('search');
+        $requestResult->unsetAttributes();
+        $requestResultProvider = $requestResult->search();
+        $criteria = new CDbCriteria();
+        $condition = 't.is_request=1 and t.exam_application_id = ' . $model->exam_application_id;
+        $criteria->addCondition($condition);
+        $requestResultProvider->criteria->mergeWith($criteria);
+        if (count($requestResultProvider)) {
+            $appication = ExamApplication::model()->findByPk($model->exam_application_id);
+            $appication->doPrintRequestResult();
+        }
 
         if (!Yii::app()->request->isAjaxRequest) {
-           Yii::app()->user->setFlash('success', Helper::MSG_SAVED);
+            Yii::app()->user->setFlash('success', Helper::MSG_SAVED);
             $this->redirect(array('index'));
         }
     }
 
-    public function actionLogin() {
+    public function actionDeletePrintResult($id)
+    {
+        $model = ExamApplicationResult::model()->findByPk($id);
+        $appication = ExamApplication::model()->findByPk($model->exam_application_id);
+        $appication->doPrintRequestResult();
+        $model->delete();
+        if (!Yii::app()->request->isAjaxRequest) {
+            Yii::app()->user->setFlash('success', Helper::MSG_DELETED);
+            $this->redirect(array('index'));
+        }
+    }
+    public function actionLogin()
+    {
         $this->layout = 'administrator.views.layouts.login';
         $model = new User('login');
         $data = Yii::app()->request->getPost('User');
@@ -147,7 +163,8 @@ class HomeController extends AdministratorController {
         ));
     }
 
-    public function actionError() {
+    public function actionError()
+    {
         if ($error = Yii::app()->errorHandler->error) {
             $this->title = 'Error ' . $error['code'];
             if (Yii::app()->request->isAjaxRequest) {
@@ -158,12 +175,14 @@ class HomeController extends AdministratorController {
         }
     }
 
-    public function actionLogout() {
+    public function actionLogout()
+    {
         Yii::app()->user->logout();
         $this->redirect(array('login'));
     }
 
-    public function actionSignMessage() {
+    public function actionSignMessage()
+    {
         $signature = null;
         $r = openssl_sign(Yii::app()->request->getQuery('request'), $signature, openssl_get_privatekey(file_get_contents(Yii::getPathOfAlias('application.data.certs') . '/ca.key')));
         if ($signature) {
@@ -175,7 +194,8 @@ class HomeController extends AdministratorController {
         exit(1);
     }
 
-    public function actionPrint() {
+    public function actionPrint()
+    {
         Yii::app()->language = 'en';
         $items = Yii::app()->request->getQuery('items', array());
         if (!is_array($items)) {
@@ -187,15 +207,14 @@ class HomeController extends AdministratorController {
 
         $models = ExamApplicationResult::model()->findAll($criteria);
         foreach ($models as $model) {
-           $application = ExamApplication::model()->findByPk($model->exam_application_id);
-           $pdf->addPage('testResultReplyFront', array(
-               'application' => $application,
-           ));
-           $pdf->addPage('testResultReplyBack', array(
-               'application' => $application,
-           ));
+            $application = ExamApplication::model()->findByPk($model->exam_application_id);
+            $pdf->addPage('testResultReplyFront', array(
+                'application' => $application,
+            ));
+            $pdf->addPage('testResultReplyBack', array(
+                'application' => $application,
+            ));
         }
         $pdf->output();
     }
-
 }

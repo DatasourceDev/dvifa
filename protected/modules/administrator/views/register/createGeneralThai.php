@@ -640,6 +640,12 @@ $form = $this->beginWidget('booster.widgets.TbActiveForm', array(
             ),
         ));
         ?>
+        <div class="form-group">
+            <label class="col-sm-4"></label>
+            <div class="col-sm-8">
+                <span class="required">ผู้สมัครสอบได้รับความยินยอมจากเจ้าของข้อมูลให้ใช้ในการอ้างอิงสำหรับกรณีนี้เป็นที่เรียบร้อยแล้ว</h5>
+            </div>
+        </div>
     </div>
 </div>
 <h4 class="fancy">คำถามสำหรับความปลอดภัย</h4>

@@ -167,18 +167,7 @@
                 ),
             ),
         ));
-        ?>
-        <?php
-        echo $form->dropDownListGroup($profile, 'religion_id', array(
-            'widgetOptions' => array(
-                'data' => CHtml::listData(CodeReligion::model()->findAll(), 'id', 'name_en'),
-                'htmlOptions' => array(
-                    'id' => 'Profile_religion_id',
-                    'prompt' => '(Please select)',
-                ),
-            ),
-        ));
-        ?>
+        ?>       
         <?php
         echo $form->textFieldGroup($profile, 'religion_other', array(
             'widgetOptions' => array(

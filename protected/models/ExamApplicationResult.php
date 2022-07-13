@@ -60,4 +60,5 @@ class ExamApplicationResult extends BaseExamApplicationResult {
       $this->is_request = self::NO;
       return $this->save();
    }
+  
 }

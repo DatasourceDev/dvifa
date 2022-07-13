@@ -16,6 +16,29 @@ $this->widget('booster.widgets.TbGridView', array(
     'dataProvider' => $dataProvider,
     'columns' => array(
         array(
+            'header' => 'ลำดับ',
+            'class' => 'booster.widgets.TbButtonColumn',
+            'template' => '{up} {down}',
+            'buttons' => array(
+                'up' => array(
+                    'icon' => 'arrow-up',
+                    'url' => 'array("moveUp","id" => $data->id)',
+                    'options' => array(
+                        'class' => 'btn-ajax-post',
+                        'data-grid-update' => '#data-grid',
+                    ),
+                ),
+                'down' => array(
+                    'icon' => 'arrow-down',
+                    'url' => 'array("moveDown","id" => $data->id)',
+                    'options' => array(
+                        'class' => 'btn-ajax-post',
+                        'data-grid-update' => '#data-grid',
+                    ),
+                ),
+            ),
+        ),
+        array(
             'class' => 'ext.codesk.widgets.CodeskButtonColumn',
             'template' => '{pin} {unpin}',
             'buttons' => array(

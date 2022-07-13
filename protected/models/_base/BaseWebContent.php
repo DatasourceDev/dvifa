@@ -27,49 +27,58 @@
  * @property User $user
  * @property string $custom_link
  */
-abstract class BaseWebContent extends ActiveRecord {
+abstract class BaseWebContent extends ActiveRecord
+{
 
-	public static function model($className=__CLASS__) {
+	public static function model($className = __CLASS__)
+	{
 		return parent::model($className);
 	}
 
-	public function tableName() {
+	public function tableName()
+	{
 		return 'web_content';
 	}
 
-	public static function label($n = 1) {
+	public static function label($n = 1)
+	{
 		return Yii::t('app', 'WebContent|WebContents', $n);
 	}
 
-	public static function representingColumn() {
+	public static function representingColumn()
+	{
 		return 'lang';
 	}
 
-	public function rules() {
+	public function rules()
+	{
 		return array(
-			array('is_visible, is_pin', 'numerical', 'integerOnly'=>true),
-			array('name', 'length', 'max'=>150),
-			array('custom_link', 'length', 'max'=>500),
-			array('user_id, brief_color', 'length', 'max'=>10),
-			array('lang', 'length', 'max'=>2),
+			array('order_no', 'numerical', 'integerOnly' => true),
+			array('is_visible, is_pin', 'numerical', 'integerOnly' => true),
+			array('name', 'length', 'max' => 150),
+			array('custom_link', 'length', 'max' => 500),
+			array('user_id, brief_color', 'length', 'max' => 10),
+			array('lang', 'length', 'max' => 2),
 			array('date_start, content, created, modified, date_end, visible_rule, brief, vdo', 'safe'),
-			array('name, date_start, content, created, modified, user_id, date_end, is_visible, visible_rule, lang, brief, is_pin, brief_color, vdo', 'default', 'setOnEmpty' => true, 'value' => null),
-			array('id, name, date_start, content, created, modified, user_id, date_end, is_visible, visible_rule, lang, brief, is_pin, brief_color, vdo', 'safe', 'on'=>'search'),
+			array('name, date_start, content, created, modified, user_id, date_end, is_visible, visible_rule, lang, brief, is_pin, brief_color, vdo, order_no', 'default', 'setOnEmpty' => true, 'value' => null),
+			array('id, name, date_start, content, created, modified, user_id, date_end, is_visible, visible_rule, lang, brief, is_pin, brief_color, vdo, order_no', 'safe', 'on' => 'search'),
 		);
 	}
 
-	public function relations() {
+	public function relations()
+	{
 		return array(
 			'user' => array(self::BELONGS_TO, 'User', 'user_id'),
 		);
 	}
 
-	public function pivotModels() {
-		return array(
-		);
+	public function pivotModels()
+	{
+		return array();
 	}
 
-	public function attributeLabels() {
+	public function attributeLabels()
+	{
 		return array(
 			'id' => Yii::t('app', 'ID'),
 			'name' => Yii::t('app', 'Name'),
@@ -87,11 +96,13 @@ abstract class BaseWebContent extends ActiveRecord {
 			'brief_color' => Yii::t('app', 'Brief Color'),
 			'vdo' => Yii::t('app', 'Vdo'),
 			'user' => null,
-	      'custom_link' => Yii::t('app', 'Custom Link'),
+			'custom_link' => Yii::t('app', 'Custom Link'),
+			'order_no' => Yii::t('app', 'Order No'),
 		);
 	}
 
-	public function search() {
+	public function search()
+	{
 		$criteria = new CDbCriteria;
 
 		$criteria->compare('id', $this->id, true);
@@ -110,6 +121,7 @@ abstract class BaseWebContent extends ActiveRecord {
 		$criteria->compare('brief_color', $this->brief_color, true);
 		$criteria->compare('vdo', $this->vdo, true);
 		$criteria->compare('custom_link', $this->custom_link, true);
+		$criteria->compare('order_no', $this->order_no);
 
 		return new CActiveDataProvider($this, array(
 			'criteria' => $criteria,

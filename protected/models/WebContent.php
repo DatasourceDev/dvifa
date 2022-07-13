@@ -98,7 +98,7 @@ class WebContent extends BaseWebContent {
       $criteria->addCondition('DATE(COALESCE(date_start,NOW())) <= :today');
       $criteria->addCondition('DATE(COALESCE(date_end,NOW())) >= :today');
       $criteria->params[':today'] = date('Y-m-d');
-      $criteria->order = 'IF(is_pin,0,1),created DESC';
+      $criteria->order = 'order_no';
       $this->dbCriteria->mergeWith($criteria);
       return $this;
    }
@@ -115,12 +115,12 @@ class WebContent extends BaseWebContent {
       $criteria->addCondition('DATE(COALESCE(date_start,NOW())) <= :today');
       $criteria->addCondition('DATE(COALESCE(date_end,NOW())) >= :today');
       $criteria->params[':today'] = date('Y-m-d');
-      $criteria->order = 'created DESC';
+      $criteria->order = 'order_no';
       $criteria->limit = $limit;
       $items = WebContent::model()->findAll($criteria);
       return $items;
    }
-
+  
    public function getIsPin() {
       return $this->is_pin === self::YES;
    }
@@ -174,4 +174,47 @@ class WebContent extends BaseWebContent {
          $this->save();
       }
    }
+
+   public function doMoveDown() {
+      $criteria = new CDbCriteria();
+      $criteria->addCondition('order_no > :current');
+      $criteria->order = '(order_no - :current)';
+      $criteria->limit = 1;
+      $criteria->params = array(
+          ':current' => $this->order_no,
+      );
+      $model = WebContent::model()->find($criteria);
+      if (isset($model)) {
+          $tmp = $model->order_no;
+          $model->order_no = $this->order_no;
+          $this->order_no = $tmp;
+          if ($model->save()) {
+              $this->save();
+              return true;
+          }
+      }
+  }
+
+  public function doMoveUp() {
+
+      $criteria = new CDbCriteria();
+      $criteria->addCondition('order_no < :current');
+      $criteria->order = '(:current - order_no)';
+      $criteria->limit = 1;
+      $criteria->params = array(
+          ':current' => $this->order_no,
+      );
+      $model = WebContent::model()->find($criteria);
+    
+      if (isset($model)) {
+          $tmp = $model->order_no;
+          $model->order_no = $this->order_no;
+          $this->order_no = $tmp;
+          if ($model->save()) {
+              $this->save();
+              return true;
+          }
+      }
+  }
+
 }

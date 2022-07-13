@@ -5,7 +5,7 @@ class WebContentController extends AdministratorController {
     public function actionIndex() {
         $model = new WebContent;
         $model->unsetAttributes();
-        $dataProvider = $model->sortBy('created DESC')->search();
+        $dataProvider = $model->sortBy('order_no')->search();
         $this->render('index', array(
             'model' => $model,
             'dataProvider' => $dataProvider,
@@ -79,6 +79,22 @@ class WebContentController extends AdministratorController {
     public function actionTogglePin($id) {
         $model = WebContent::model()->findByPk($id);
         $model->doTogglePin();
+        if (!Yii::app()->request->isAjaxRequest) {
+            $this->redirect(array('index'));
+        }
+    }
+    public function actionMoveDown($id) {
+        $model = WebContent::model()->findByPk($id);
+        $model->doMoveDown();
+        if (!Yii::app()->request->isAjaxRequest) {
+            $this->redirect(array('index'));
+        }
+    }
+
+    public function actionMoveUp($id) {
+       
+        $model = WebContent::model()->findByPk($id);
+        $model->doMoveUp();
         if (!Yii::app()->request->isAjaxRequest) {
             $this->redirect(array('index'));
         }

@@ -1,15 +1,18 @@
 <?php
 
-class MyController extends Controller {
+class MyController extends Controller
+{
 
    public $model;
 
-   public function init() {
+   public function init()
+   {
       parent::init();
       $this->model = Account::model()->findByPk(Yii::app()->user->id);
    }
 
-   public function actionIndex() {
+   public function actionIndex()
+   {
       $model = $this->model;
       $model->scenario = 'changePassword';
       $data = Yii::app()->request->getPost('Account');
@@ -21,69 +24,71 @@ class MyController extends Controller {
          }
       }
       $this->render('index', array(
-          'model' => $this->model,
+         'model' => $this->model,
       ));
    }
 
-   public function actionResult() {
+   public function actionResult()
+   {
       $model = new ExamApplication('search');
       $model->unsetAttributes();
       $model->account_id = $this->model->id;
       $dataProvider = $model->scopeValid()->with(array('examSchedule' => array('together' => true)))->sortBy('examSchedule.exam_code DESC, t.desk_no')->search();
       $dataProvider->pagination = false;
       $this->render('result', array(
-          'model' => $this->model,
-          'dataProvider' => $dataProvider,
+         'model' => $this->model,
+         'dataProvider' => $dataProvider,
       ));
    }
 
 
 
 
-   public function actionresultForm($id) {
+   public function actionresultForm($id)
+   {
 
       $profile = $this->model->getProfile();
-      $account =Yii::app()->user->Account;
+      $account = Yii::app()->user->Account;
 
       $model = new ExamApplicationResult('search');
       $model->exam_application_id = $id;
-      $model->name =$profile->fullname;
-      $model->member_id =$account->id;
-      $model->id_card =$account->username;
-      $model->tel =$profile->contact_phone;
+      $model->name = $profile->fullname;
+      $model->member_id = $account->id;
+      $model->id_card = $account->username;
+      $model->tel = $profile->contact_phone;
 
       $addr = $profile->reply_address_homeno;
-      if(isset( $profile->reply_address_building))
+      if (isset($profile->reply_address_building))
          $addr = $addr . " " . $profile->reply_address_building;
 
-      if(isset( $profile->reply_address_floor))
+      if (isset($profile->reply_address_floor))
          $addr = $addr . " " . $profile->reply_address_floor;
 
-      if(isset( $profile->reply_address_soi))
+      if (isset($profile->reply_address_soi))
          $addr = $addr . " " . $profile->reply_address_soi;
 
-      if(isset( $profile->reply_address_street))
+      if (isset($profile->reply_address_street))
          $addr = $addr . " " . $profile->reply_address_street;
 
-      if(isset( $profile->reply_address_province_id)){
+      if (isset($profile->reply_address_province_id)) {
          $province = CodeProvince::model()->findByPk($profile->reply_address_province_id);
          $addr = $addr . " " . $province->name;
       }
 
-      if(isset( $profile->reply_address_amphur_id)){
+      if (isset($profile->reply_address_amphur_id)) {
          $aumper = CodeAmphur::model()->findByPk($profile->reply_address_amphur_id);
          $addr = $addr . " " . $aumper->name;
       }
 
-      if(isset( $profile->reply_address_tumbon_id)){
+      if (isset($profile->reply_address_tumbon_id)) {
          $tumbon = CodeTumbon::model()->findByPk($profile->reply_address_tumbon_id);
          $addr = $addr . " " . $tumbon->name;
       }
 
-      if(isset( $profile->reply_address_postcode))
+      if (isset($profile->reply_address_postcode))
          $addr = $addr . " " . $profile->reply_address_postcode;
 
-      $model->address =$addr;
+      $model->address = $addr;
       $model->is_request = 1;
 
       $exam = ExamApplication::model()->findByPk($id);
@@ -91,10 +96,10 @@ class MyController extends Controller {
 
       if (Yii::app()->request->isPostRequest) {
          $model->attributes = Yii::app()->request->getPost(get_class($model));
-         if(!isset( $model->address)){
+         if (!isset($model->address)) {
             $model->address = 'N/A';
          }
-         $model->request_date= new CDbExpression('NOW()');
+         $model->request_date = new CDbExpression('NOW()');
 
          $valid =  $model->validate();
          if (!Yii::app()->request->isAjaxRequest && $valid && $model->save(false)) {
@@ -104,54 +109,57 @@ class MyController extends Controller {
             $text = 'สถาบันการต่างประเทศฯ<br/>ได้รับคำร้องการขอใบรับรองผลการทดสอบ DIFA TES (รอบสอบ ' . $excode . ') ฉบับใหม่/ขอเพิ่ม<br/>โดยได้จัดส่งแบบฟอร์มการชำระเงินไปที่ Email ของท่านเรียบร้อยแล้ว<br/><br/>กรุณาชำระค่าธรรมเนียมและส่งหลักฐานการชำระเงินให้สถาบันการต่างประเทศฯ<br/>ที่ Email : difates.thailand@gmail.com หรือ โทรสาร 02 143 9326';
             $textmail = 'สถาบันการต่างประเทศฯ<br/>ได้รับคำร้องการขอใบรับรองผลการทดสอบ DIFA TES (รอบสอบ ' . $excode . ') ฉบับใหม่ของท่านเรียบร้อยแล้ว<br/><br/>กรุณาชำระค่าธรรมเนียมและส่งหลักฐานการชำระเงินให้สถาบันการต่างประเทศฯ<br/>ที่ Email : difates.thailand@gmail.com หรือ โทรสาร 02 143 9326<br/><br/>ทั้งนี้ สถาบันการต่างประเทศฯ จะดำเนินการออกใบรับรองผลการทดสอบฯ และจัดส่งให้ตามช่องทางที่ท่านระบุภายใน 7 วันทำการ นับจากวันถัดไปจากที่ได้รับหลักฐานการชำระเงินแล้ว<br/><br/>ดาวน์โหลดแบบฟอร์มการชำระเงินได้ตามเอกสารแนบ';
             Mailer::sendRequestResult($profile->contact_email, array(
-                          'data' => array(
-                                'model' => $model,
-                          ),
-                          'message' => array(
-                                'text' => $textmail,
-                          ),
-                       ));
+               'data' => array(
+                  'model' => $model,
+               ),
+               'message' => array(
+                  'text' => $textmail,
+               ),
+            ));
 
             Yii::app()->user->setFlash('success', $text);
             $this->redirect(array('result'));
          }
       }
       $this->render('resultForm', array(
-                    'model' => $model,
-                    'profile' => $profile,
-                    'account' => $account
-                ));
+         'model' => $model,
+         'profile' => $profile,
+         'account' => $account
+      ));
    }
 
 
-   public function actionRequestResult($id) {
+   public function actionRequestResult($id)
+   {
       $model = ExamApplication::model()->findByPk($id);
       $model->doRequestResult();
       if (!Yii::app()->request->isAjaxRequest) {
          $data = Yii::app()->user->Account;
-         if(isset($data)){
+         if (isset($data)) {
             Mailer::sendRequestResult($data->getProfile()->contact_email, array(
-                  'data' => array(
-                      'model' => $data,
-                  ),
-                 'message' => array(
-                      'text' => 'มารับใบรับรองได้ตั้งแต่วันที่' . Yii::app()->format->formatDate(Helper::getNextWorkDay(date("Y-m-d"), 3)) . 'ติดต่อที่เบอร์ 02-2035000 ต่อ 47024 ในเวลาราชการ',
-                  ),
-              ));
+               'data' => array(
+                  'model' => $data,
+               ),
+               'message' => array(
+                  'text' => 'มารับใบรับรองได้ตั้งแต่วันที่' . Yii::app()->format->formatDate(Helper::getNextWorkDay(date("Y-m-d"), 3)) . 'ติดต่อที่เบอร์ 02-2035000 ต่อ 47024 ในเวลาราชการ',
+               ),
+            ));
          }
 
          Yii::app()->user->setFlash('success', 'มารับใบรับรองได้ตั้งแต่วันที่' . Yii::app()->format->formatDate(Helper::getNextWorkDay(date("Y-m-d"), 3)) . 'ติดต่อที่เบอร์ 02-2035000 ต่อ 47024 ในเวลาราชการ');
          $this->redirect(array('result'));
       }
    }
-   public function actionPrintCerSlip() {
+   public function actionPrintCerSlip()
+   {
       $pdf = new PDFMaker;
       $pdf->addRequestResltTmpSlip();
       $pdf->output();
    }
 
 
-   public function actionSecurity() {
+   public function actionSecurity()
+   {
       $model = $this->model;
       $model->scenario = 'changePassword';
       $data = Yii::app()->request->getPost('Account');
@@ -165,11 +173,12 @@ class MyController extends Controller {
          }
       }
       $this->render('security', array(
-          'model' => $this->model,
+         'model' => $this->model,
       ));
    }
 
-   public function actionProfile() {
+   public function actionProfile()
+   {
       $profile = $this->model->getProfile();
       $profile->scenario = 'update';
       if (!$this->model->secure_question_1) {
@@ -214,43 +223,47 @@ class MyController extends Controller {
       }
 
       $this->render('profile', array(
-          'model' => $this->model,
-          'profile' => $profile,
-          'view' => $view,
+         'model' => $this->model,
+         'profile' => $profile,
+         'view' => $view,
       ));
    }
 
-   public function actionApplication() {
+   public function actionApplication()
+   {
       $model = new ExamApplication('search');
       $model->unsetAttributes();
       $model->account_id = $this->model->id;
       $dataProvider = $model->sortBy()->scopeValid()->search();
       $dataProvider->pagination = false;
       $this->render('application', array(
-          'model' => $this->model,
-          'dataProvider' => $dataProvider,
+         'model' => $this->model,
+         'dataProvider' => $dataProvider,
       ));
    }
 
-   public function actionCertificate() {
+   public function actionCertificate()
+   {
       $model = new ExamApplication('search');
       $model->unsetAttributes();
       $model->account_id = $this->model->id;
       $dataProvider = $model->with(array('examSchedule' => array('together' => true)))->scopeValid()->sortBy('examSchedule.db_date DESC')->search();
       $dataProvider->pagination = false;
       $this->render('certificate', array(
-          'model' => $this->model,
-          'dataProvider' => $dataProvider,
+         'model' => $this->model,
+         'dataProvider' => $dataProvider,
       ));
    }
 
-   public function actionSchedule() {
+   public function actionSchedule()
+   {
       $this->render('schedule', array(
-          'model' => $this->model,
+         'model' => $this->model,
       ));
    }
 
-   public function actionChangeName() {
+   public function actionChangeName()
+   {
       $log = new ProfileChangeName('search');
       $log->unsetAttributes();
       $log->account_id = $this->model->id;
@@ -263,17 +276,16 @@ class MyController extends Controller {
       $workProvider = $work->sortBy('created DESC')->search();
       $workProvider->pagination = false;
       $this->render('changeName', array(
-          'model' => $this->model,
-          'profile' => $this->model->getProfile(),
-          'dataProvider' => $dataProvider,
-          'workProvider' => $workProvider,
+         'model' => $this->model,
+         'profile' => $this->model->getProfile(),
+         'dataProvider' => $dataProvider,
+         'workProvider' => $workProvider,
       ));
    }
 
-   public function actionGetSelfFile() {
+   public function actionGetSelfFile()
+   {
       $file = CHtml::value($this, 'model.profile.selfFile.filePath');
       Yii::app()->request->sendFile(basename($file), $file);
    }
-
 }
-

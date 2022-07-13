@@ -6,7 +6,7 @@ $form = $this->beginWidget('booster.widgets.TbActiveForm', array(
         'id' => 'frm-register',
         'enctype' => 'multipart/form-data',
     ),
-        ));
+));
 ?>
 <?php echo $form->errorSummary($model, $profile); ?>
 <h4 class="fancy"><?php echo Yii::t('register', 'General'); ?></h4>
@@ -241,7 +241,7 @@ $form = $this->beginWidget('booster.widgets.TbActiveForm', array(
             ),
         ));
         ?>
-        <?php if (!$model->isNewRecord && $profile->empCardFile->getFileUrl('thumbnail')): ?>
+        <?php if (!$model->isNewRecord && $profile->empCardFile->getFileUrl('thumbnail')) : ?>
             <div class="form-group">
                 <div class="col-sm-9 col-sm-offset-3">
                     <?php echo CHtml::image($profile->empCardFile->getFileUrl('thumbnail') . '?t=' . time()); ?>
@@ -397,8 +397,8 @@ $form = $this->beginWidget('booster.widgets.TbActiveForm', array(
         echo $form->dropDownListGroup($profile, 'work_address_amphur_id', array(
             'widgetOptions' => array(
                 'data' => CHtml::listData(CodeAmphur::model()->sortBy('name')->findAllByAttributes(array(
-                            'code_province_id' => $profile->work_address_province_id,
-                        )), 'id', 'name'),
+                    'code_province_id' => $profile->work_address_province_id,
+                )), 'id', 'name'),
                 'htmlOptions' => array(
                     'id' => 'Profile_work_address_amphur_id',
                     'class' => 'input-update',
@@ -412,9 +412,9 @@ $form = $this->beginWidget('booster.widgets.TbActiveForm', array(
         echo $form->dropDownListGroup($profile, 'work_address_tumbon_id', array(
             'widgetOptions' => array(
                 'data' => CHtml::listData(CodeTumbon::model()->sortBy('name')->findAllByAttributes(array(
-                            'code_province_id' => $profile->work_address_province_id,
-                            'code_amphur_id' => $profile->work_address_amphur_id,
-                        )), 'id', 'name'),
+                    'code_province_id' => $profile->work_address_province_id,
+                    'code_amphur_id' => $profile->work_address_amphur_id,
+                )), 'id', 'name'),
                 'htmlOptions' => array(
                     'id' => 'Profile_work_address_tumbon_id',
                     'prompt' => '(กรุณาเลือก)',
@@ -517,8 +517,8 @@ $form = $this->beginWidget('booster.widgets.TbActiveForm', array(
             echo $form->dropDownListGroup($profile, 'reply_address_amphur_id', array(
                 'widgetOptions' => array(
                     'data' => CHtml::listData(CodeAmphur::model()->sortBy('name')->findAllByAttributes(array(
-                                'code_province_id' => $profile->reply_address_province_id,
-                            )), 'id', 'name'),
+                        'code_province_id' => $profile->reply_address_province_id,
+                    )), 'id', 'name'),
                     'htmlOptions' => array(
                         'id' => 'Profile_reply_address_amphur_id',
                         'class' => 'input-update',
@@ -533,9 +533,9 @@ $form = $this->beginWidget('booster.widgets.TbActiveForm', array(
             echo $form->dropDownListGroup($profile, 'reply_address_tumbon_id', array(
                 'widgetOptions' => array(
                     'data' => CHtml::listData(CodeTumbon::model()->sortBy('name')->findAllByAttributes(array(
-                                'code_province_id' => $profile->reply_address_province_id,
-                                'code_amphur_id' => $profile->reply_address_amphur_id,
-                            )), 'id', 'name'),
+                        'code_province_id' => $profile->reply_address_province_id,
+                        'code_amphur_id' => $profile->reply_address_amphur_id,
+                    )), 'id', 'name'),
                     'htmlOptions' => array(
                         'id' => 'Profile_reply_address_tumbon_id',
                         'prompt' => '(กรุณาเลือก)',
@@ -619,97 +619,102 @@ $form = $this->beginWidget('booster.widgets.TbActiveForm', array(
             ),
         ));
         ?>
+        <div class="form-group">
+            <label class="col-sm-4"></label>
+            <div class="col-sm-8">
+                <span class="required">ผู้สมัครสอบได้รับความยินยอมจากเจ้าของข้อมูลให้ใช้ในการอ้างอิงสำหรับกรณีนี้เป็นที่เรียบร้อยแล้ว</h5>
+            </div>
+        </div>
     </div>
-</div>
-<div class="btn-toolbar well">
-    <?php
-    $this->widget('booster.widgets.TbButton', array(
-        'label' => 'Cancel',
-        'buttonType' => 'link',
-        'url' => array('/register'),
-    ));
-    ?>
-    <?php
-    $this->widget('booster.widgets.TbButton', array(
-        'label' => 'Submit',
-        'buttonType' => 'submit',
-        'context' => 'primary',
-        'htmlOptions' => array(
-            'class' => 'pull-right',
-            'onclick' => 'return confirm("Do you want to submit the form?")',
-        ),
-    ));
-    ?>
-</div>
-<?php $this->endWidget(); ?>
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('#frm-register').change(function () {
-            if ($('#Account_entry_code').val() && $('#Account_password_input').val() && $('#Account_password_confirm').val() && $('#Profile_birth_date').val()) {
-                $.get('<?php echo $this->createUrl('checkExistingAccount'); ?>', {
-                    data: {
-                        entry_code: $('#Account_entry_code').val(),
-                        password_input: $('#Account_password_input').val(),
-                        password_confirm: $('#Account_password_confirm').val(),
-                        birth_date: $('#Profile_birth_date').val()
-                    }
-                }, function (data) {
-                    if (data !== 'OK') {
-                        $('#base-modal .modal-content').html(data);
-                        $('#base-modal').modal('show');
-                    }
-                });
-            }
+    <div class="btn-toolbar well">
+        <?php
+        $this->widget('booster.widgets.TbButton', array(
+            'label' => 'Cancel',
+            'buttonType' => 'link',
+            'url' => array('/register'),
+        ));
+        ?>
+        <?php
+        $this->widget('booster.widgets.TbButton', array(
+            'label' => 'Submit',
+            'buttonType' => 'submit',
+            'context' => 'primary',
+            'htmlOptions' => array(
+                'class' => 'pull-right',
+                'onclick' => 'return confirm("Do you want to submit the form?")',
+            ),
+        ));
+        ?>
+    </div>
+    <?php $this->endWidget(); ?>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#frm-register').change(function() {
+                if ($('#Account_entry_code').val() && $('#Account_password_input').val() && $('#Account_password_confirm').val() && $('#Profile_birth_date').val()) {
+                    $.get('<?php echo $this->createUrl('checkExistingAccount'); ?>', {
+                        data: {
+                            entry_code: $('#Account_entry_code').val(),
+                            password_input: $('#Account_password_input').val(),
+                            password_confirm: $('#Account_password_confirm').val(),
+                            birth_date: $('#Profile_birth_date').val()
+                        }
+                    }, function(data) {
+                        if (data !== 'OK') {
+                            $('#base-modal .modal-content').html(data);
+                            $('#base-modal').modal('show');
+                        }
+                    });
+                }
+                initForm();
+            });
             initForm();
         });
-        initForm();
-    });
 
-    function updateAddress() {
-        if ($('#Profile_is_same_address').prop('checked')) {
-            $('#reply_address_pane input, #reply_address_pane select').prop('disabled', true);
-        } else {
-            $('#reply_address_pane input, #reply_address_pane select').prop('disabled', false);
-        }
-    }
-
-    function initForm() {
-        $('#Profile_title_id_en').val($('#Profile_title_id_th').val());
-
-        if ($('#Profile_title_id_th').val() === 'O') {
-            $('#Profile_title_th').closest('.form-group').show();
-        } else {
-            $('#Profile_title_th').val($('#Profile_title_id_th').find(":selected").text());
-            $('#Profile_title_th').closest('.form-group').hide();
+        function updateAddress() {
+            if ($('#Profile_is_same_address').prop('checked')) {
+                $('#reply_address_pane input, #reply_address_pane select').prop('disabled', true);
+            } else {
+                $('#reply_address_pane input, #reply_address_pane select').prop('disabled', false);
+            }
         }
 
-        if ($('#Profile_title_id_en').val() === 'O') {
-            $('#Profile_title_en').closest('.form-group').show();
-        } else {
-            $('#Profile_title_en').val($('#Profile_title_id_en').find(":selected").text());
-            $('#Profile_title_en').closest('.form-group').hide();
-        }
+        function initForm() {
+            $('#Profile_title_id_en').val($('#Profile_title_id_th').val());
 
-        if ($('#Profile_work_office_id').val() === '9999') {
-            $('#Profile_work_office_other').closest('.form-group').show();
-        } else {
-            $('#Profile_work_office_other').val($('#Profile_work_office_id').find(":selected").text());
-            $('#Profile_work_office_other').closest('.form-group').hide();
-        }
+            if ($('#Profile_title_id_th').val() === 'O') {
+                $('#Profile_title_th').closest('.form-group').show();
+            } else {
+                $('#Profile_title_th').val($('#Profile_title_id_th').find(":selected").text());
+                $('#Profile_title_th').closest('.form-group').hide();
+            }
 
-        if ($('#Profile_work_level').val() === '99') {
-            $('#Profile_work_level_other').closest('.form-group').show();
-        } else {
-            $('#Profile_work_level_other').val($('#Profile_work_level').find(":selected").text());
-            $('#Profile_work_level_other').closest('.form-group').hide();
-        }
+            if ($('#Profile_title_id_en').val() === 'O') {
+                $('#Profile_title_en').closest('.form-group').show();
+            } else {
+                $('#Profile_title_en').val($('#Profile_title_id_en').find(":selected").text());
+                $('#Profile_title_en').closest('.form-group').hide();
+            }
 
-        if ($('#Profile_educate_degree').val() === 'O') {
-            $('#Profile_educate_degree_other').closest('.form-group').show();
-        } else {
-            $('#Profile_educate_degree_other').val($('#Profile_educate_degree').find(":selected").text());
-            $('#Profile_educate_degree_other').closest('.form-group').hide();
+            if ($('#Profile_work_office_id').val() === '9999') {
+                $('#Profile_work_office_other').closest('.form-group').show();
+            } else {
+                $('#Profile_work_office_other').val($('#Profile_work_office_id').find(":selected").text());
+                $('#Profile_work_office_other').closest('.form-group').hide();
+            }
+
+            if ($('#Profile_work_level').val() === '99') {
+                $('#Profile_work_level_other').closest('.form-group').show();
+            } else {
+                $('#Profile_work_level_other').val($('#Profile_work_level').find(":selected").text());
+                $('#Profile_work_level_other').closest('.form-group').hide();
+            }
+
+            if ($('#Profile_educate_degree').val() === 'O') {
+                $('#Profile_educate_degree_other').closest('.form-group').show();
+            } else {
+                $('#Profile_educate_degree_other').val($('#Profile_educate_degree').find(":selected").text());
+                $('#Profile_educate_degree_other').closest('.form-group').hide();
+            }
         }
-    }
-</script>
-<?php $this->endContent(); ?>
+    </script>
+    <?php $this->endContent(); ?>

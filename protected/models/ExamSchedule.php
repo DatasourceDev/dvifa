@@ -106,7 +106,7 @@ class ExamSchedule extends BaseExamSchedule {
             'examApplications' => array(self::HAS_MANY, 'ExamApplication', 'exam_schedule_id', 'order' => 'examApplications.desk_no'),
             'examScheduleItems' => array(self::HAS_MANY, 'ExamScheduleItem', 'exam_schedule_id', 'order' => 'examScheduleItems.order_no'),
             'examScheduleDepartments' => array(self::HAS_MANY, 'ExamScheduleDepartment', 'exam_schedule_id'),
-            'examScheduleUniqueItems' => array(self::HAS_MANY, 'ExamScheduleItem', 'exam_schedule_id', 'order' => 'examScheduleUniqueItems.order_no', 'group' => 'exam_subject_id'),
+            'examScheduleUniqueItems' => array(self::HAS_MANY, 'ExamScheduleItem', 'exam_schedule_id', 'order' => 'examScheduleUniqueItems.order_no, examScheduleUniqueItems.time_start', 'group' => 'exam_subject_id'),
             'firstExamScheduleItem' => array(self::HAS_ONE, 'ExamScheduleItem', 'exam_schedule_id', 'order' => 'firstExamScheduleItem.order_no'),
             'countAttendee' => array(self::STAT, 'ExamApplication', 'exam_schedule_id'),
             'countAttendeePaid' => array(self::STAT, 'ExamApplication', 'exam_schedule_id', 'condition' => 'is_confirm = 1 AND is_paid = 1 AND is_applicable = 1'),
